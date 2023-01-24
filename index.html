@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <title>Clock Cave</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Jost&display=swap');
+
+      body {
+        background: #333333;
+        overflow: hidden;
+      }
+      #subcontainer {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+
+      #txt {
+        font-family: 'Jost';
+        color: #fffae8;
+        font-size: max(25vw, 30px);
+      }
+      #time {
+        display: none;
+      }
+      .full-screen {
+        z-index: 1;
+        cursor: pointer;
+        text-align: right;
+        position: fixed;
+      }
+    </style>
+  </head>
+
+  <body onload="startTime()">
+    <div class="full-screen">
+      <img
+        src="full-screen.png"
+        id="full-screen"
+        alt=""
+        onclick="fullscreen()"
+      />
+    </div>
+    <div id="subcontainer">
+      <div id="txt"></div>
+      <div id="time"></div>
+    </div>
+    <script>
+      function startTime() {
+        const today = new Date();
+        let h = today.getHours() % 24 || 24;
+        let m = today.getMinutes();
+        let s = today.getSeconds();
+        let t = today.getHours() < 12 ? '\nAM' : '\nPM';
+        m = checkTime(m);
+        s = checkTime(s);
+
+        document.getElementById('txt').innerHTML = h + ':' + m + ':' + s;
+        document.getElementById('time').innerHTML = t;
+        setTimeout(startTime, 1000);
+      }
+
+      function checkTime(i) {
+        if (i < 10) {
+          i = '0' + i;
+        }
+        return i;
+      }
+
+      function fullscreen() {
+        var isInFullScreen =
+          (document.fullscreenElement && document.fullscreenElement !== null) ||
+          (document.webkitFullscreenElement &&
+            document.webkitFullscreenElement !== null) ||
+          (document.mozFullScreenElement &&
+            document.mozFullScreenElement !== null) ||
+          (document.msFullscreenElement &&
+            document.msFullscreenElement !== null);
+
+        var docElm = document.documentElement;
+        if (!isInFullScreen) {
+          document.getElementById('full-screen').src = 'exit-full-screen.png';
+          if (docElm.requestFullscreen) {
+            docElm.requestFullscreen();
+          } else if (docElm.mozRequestFullScreen) {
+            docElm.mozRequestFullScreen();
+          } else if (docElm.webkitRequestFullScreen) {
+            docElm.webkitRequestFullScreen();
+          } else if (docElm.msRequestFullscreen) {
+            docElm.msRequestFullscreen();
+          }
+        } else {
+          document.getElementById('full-screen').src = 'full-screen.png';
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
